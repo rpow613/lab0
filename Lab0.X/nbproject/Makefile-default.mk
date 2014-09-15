@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=
+SOURCEFILES_QUOTED_IF_SPACED=../lab0.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=
-POSSIBLE_DEPFILES=
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/1472/lab0.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/1472/lab0.o.d
 
 # Object Files
-OBJECTFILES=
+OBJECTFILES=${OBJECTDIR}/_ext/1472/lab0.o
 
 # Source Files
-SOURCEFILES=
+SOURCEFILES=../lab0.c
 
 
 CFLAGS=
@@ -82,7 +82,21 @@ MP_LINKER_FILE_OPTION=,--script=p24FJ64GA002.gld
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
+${OBJECTDIR}/_ext/1472/lab0.o: ../lab0.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/_ext/1472 
+	@${RM} ${OBJECTDIR}/_ext/1472/lab0.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1472/lab0.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../lab0.c  -o ${OBJECTDIR}/_ext/1472/lab0.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1472/lab0.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1    -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/lab0.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
 else
+${OBJECTDIR}/_ext/1472/lab0.o: ../lab0.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/_ext/1472 
+	@${RM} ${OBJECTDIR}/_ext/1472/lab0.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1472/lab0.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../lab0.c  -o ${OBJECTDIR}/_ext/1472/lab0.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1472/lab0.o.d"        -g -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/lab0.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
 endif
 
 # ------------------------------------------------------------------------------------

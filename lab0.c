@@ -60,6 +60,9 @@ _CONFIG2( IESO_OFF & SOSCSEL_SOSC & WUTSEL_LEG & FNOSC_PRIPLL & FCKSM_CSDCMD & O
 #define BRGVAL          ((FCY/BAUDRATE)/16)-1 
 
 // ******************************************************************************************* //
+// Definition for State variable
+typedef enum StateTypeEnum {WaitForPress, WaitForRelease, LEDToggle} stateType;
+// ******************************************************************************************* //
 
 // Global variables can be accessed by both the main application code and the interrupt 
 // service routines. Descriptions should be provided to clearly indicate what the variable
@@ -76,6 +79,7 @@ int main(void)
 {
 	// Varaible for character recived by UART.
 	int receivedChar;
+        stateType state;
 
 	//RPINR18 is a regsiter for selectable input mapping (see Table 10-2) for 
 	// for UART1. U1RX is 8 bit value used to specifiy connection to which
@@ -99,8 +103,10 @@ int main(void)
 	TRISBbits.TRISB13 = 0;
 	TRISBbits.TRISB12 = 0;
 
-	// **TODO** SW1 of the 16-bit 28-pin Starter Board is connected to pin RB??. 
+	// **DONE** SW1 of the 16-bit 28-pin Starter Board is connected to pin RB 5.
 	// Assign the TRISB bit for this pin to configure this port as an input.
+
+        TRISBbits.TRISB5 = 1;
 
 
 	// Clear Timer value (i.e. current tiemr value) to 0
@@ -172,10 +178,11 @@ int main(void)
 	//           c.) Entering the size of heap, e.g. 512, under Heap Size
 	//        2. printf function is advanced and using printf may require 
 	//           significant code size (6KB-10KB).   
-	printf("\n\n\rkonnichiwa!\n\r");
+	printf("\n\n\Hello!\n\r");
 
 	// Print a message requesting the user to select a LED to toggle.
 	printf("Select LED to Toggle (4-7): ");
+        state = WaitForPress;
 
 	// The main loop for your microcontroller should not exit (return), as
 	// the program should run as long as the device is powered on. 
@@ -185,7 +192,26 @@ int main(void)
 		// whenever the SW1 is continuously pressed, the currently selected LED 
 		// will blink twice as fast. When SW1 is released the LEDs will blink at 
 		// the initially defined rate.
+            switch(state) {
+                case WaitForPress:
+                    if (PORTBbits.RB5==0) {
+                        state = LEDToggle;
+                    }
+                    break;
+                case WaitForRelease:
+                    if (PORTBbits.RB5 == 1) {
+                        PR1 = 14400;
+                        TMR1 = 0;
+                        state = WaitForPress;
+                    }
+                    break;
+                case LEDToggle:
 
+                    PR1 = 14400/2;
+                    TMR1 = 0;
+                    LATB = LATB^0x8000;
+                    break;
+            }
 
 		// Use the UART RX interrupt flag to wait until we recieve a character.
 		if(IFS0bits.U1RXIF == 1) {	
